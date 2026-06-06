@@ -157,6 +157,28 @@ tasks:
 
 > **Atenção:** o `dev` procura pelo `dev.yaml` no **diretório atual**. Execute sempre a partir da raiz do projeto.
 
+### Formatadores & Macros
+
+Você pode habilitar formatadores de macros nativas para resolver valores dinamicamente dentro dos comandos sem depender de ferramentas específicas do SO. Liste os formatadores habilitados na chave `formatters` e use a sintaxe `@<formatador>.<acao>(<args>)`:
+
+```yaml
+formatters:
+  - time
+  - env
+
+tasks:
+  build:
+    description: Build com data e porta do env
+    cmd: go build -o bin/app_@time.now('YYYY-MM-DD')_@env.get('PORT')
+```
+
+#### Formatadores Disponíveis
+
+| Formatador | Ação | Exemplo | Descrição |
+| --- | --- | --- | --- |
+| `time` | `now('formato')` | `@time.now('YYYY-MM-DD')` | Formata a data atual usando tokens universais (`YYYY`, `YY`, `MM`, `DD`, `hh`, `mm`, `ss`). |
+| `env` | `get('VAR')` | `@env.get('PORT')` | Lê do arquivo `.env` local ou das variáveis de ambiente globais do sistema. |
+
 ---
 
 ## Uso
