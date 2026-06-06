@@ -1,0 +1,12 @@
+# compiled binary
+dev
+
+# test coverage
+*.out
+coverage.html
+
+# editor
+.vscode/
+.idea/
+*.swp
+*.swo

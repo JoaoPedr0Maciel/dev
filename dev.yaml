@@ -1,0 +1,16 @@
+tasks:
+  build:
+    description: Build application
+    cmd: go build .
+
+  test:
+    description: Run tests
+    cmd: go test ./...
+
+  run:
+    description: Run application
+    cmd: go run .
+
+  lint:
+    description: Run linter
+    cmd: go vet ./...
