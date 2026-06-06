@@ -58,6 +58,7 @@ curl -fsSL https://raw.githubusercontent.com/JoaoPedr0Maciel/dev/main/install.sh
 ```
 
 O script vai:
+
 1. Detectar seu sistema operacional e arquitetura
 2. Baixar o binário correto da [última release](https://github.com/JoaoPedr0Maciel/dev/releases/latest)
 3. Instalar em `/usr/local/bin` (ou `~/.local/bin` se não tiver permissão de escrita)
@@ -148,10 +149,10 @@ tasks:
 
 ### Campos
 
-| Campo | Obrigatório | Descrição |
-|---|---|---|
-| `description` | Não | Texto exibido no painel de descrição da TUI |
-| `cmd` | Sim | Comando shell a ser executado (`sh -c` no Linux/macOS) |
+| Campo         | Obrigatório | Descrição                                              |
+| ------------- | ----------- | ------------------------------------------------------ |
+| `description` | Não         | Texto exibido no painel de descrição da TUI            |
+| `cmd`         | Sim         | Comando shell a ser executado (`sh -c` no Linux/macOS) |
 
 > **Atenção:** o `dev` procura pelo `dev.yaml` no **diretório atual**. Execute sempre a partir da raiz do projeto.
 
@@ -202,16 +203,26 @@ Running build...
 ./main.go:12:2: undefined: someFunc
 ```
 
+### Caminho de configuração customizado
+
+Por padrão, o `dev` procura pelo arquivo `dev.yaml` no diretório atual. Você pode especificar um arquivo YAML customizado usando a flag `--path`:
+
+```bash
+dev --path meu-config.yaml
+
+dev --path meu-config.yaml <nome-da-task>
+```
+
 ---
 
 ## Atalhos de teclado
 
-| Tecla | Ação |
-|---|---|
-| `↑` ou `k` | Mover seleção para cima |
-| `↓` ou `j` | Mover seleção para baixo |
-| `Enter` | Executar a tarefa selecionada |
-| `q` ou `Ctrl+C` | Sair |
+| Tecla           | Ação                          |
+| --------------- | ----------------------------- |
+| `↑` ou `k`      | Mover seleção para cima       |
+| `↓` ou `j`      | Mover seleção para baixo      |
+| `Enter`         | Executar a tarefa selecionada |
+| `q` ou `Ctrl+C` | Sair                          |
 
 ---
 
