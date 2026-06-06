@@ -5,7 +5,7 @@ tasks:
 
   test:
     description: Run tests
-    cmd: go test ./...
+    cmd: go test -v ./tests/...
 
   run:
     description: Run application
