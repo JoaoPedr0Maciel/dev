@@ -16,18 +16,21 @@ type Task struct {
 	Cmd         string `yaml:"cmd"`
 }
 
-func Load() (*Config, error) {
-	data, err := os.ReadFile("dev.yaml")
+func Load(path string) (*Config, error) {
+	if path == "" {
+		path = "dev.yaml"
+	}
+	data, err := os.ReadFile(path)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return nil, fmt.Errorf("dev.yaml not found")
+			return nil, fmt.Errorf("%s not found", path)
 		}
-		return nil, fmt.Errorf("reading dev.yaml: %w", err)
+		return nil, fmt.Errorf("reading %s: %w", path, err)
 	}
 
 	var cfg Config
 	if err := yaml.Unmarshal(data, &cfg); err != nil {
-		return nil, fmt.Errorf("parsing dev.yaml: %w", err)
+		return nil, fmt.Errorf("parsing %s: %w", path, err)
 	}
 
 	if cfg.Tasks == nil {

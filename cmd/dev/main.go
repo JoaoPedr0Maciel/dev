@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"time"
@@ -11,7 +12,11 @@ import (
 )
 
 func main() {
-	cfg, err := config.Load()
+	var configPath string
+	flag.StringVar(&configPath, "path", "dev.yaml", "path to the yaml configuration file")
+	flag.Parse()
+
+	cfg, err := config.Load(configPath)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Error:", err)
 		os.Exit(1)
@@ -23,8 +28,9 @@ func main() {
 	}
 
 	// Direct execution: dev <task-name>
-	if len(os.Args) > 1 {
-		runDirect(cfg, os.Args[1])
+	args := flag.Args()
+	if len(args) > 0 {
+		runDirect(cfg, args[0])
 		return
 	}
 
