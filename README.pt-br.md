@@ -44,6 +44,7 @@
 - [Uso](#uso)
 - [Atalhos de teclado](#atalhos-de-teclado)
 - [Exemplos](#exemplos)
+- [Atualizando](#atualizando)
 
 ---
 
@@ -168,7 +169,7 @@ Execute `dev` sem argumentos para abrir a interface interativa:
 dev
 ```
 
-Use o teclado para navegar pela lista de tarefas, ler a descrição e executar. O resultado é exibido com status de saída, duração e output.
+Navegue pela lista de tarefas, leia a descrição e pressione `Enter` para executar. A TUI fecha e o output do comando é exibido ao vivo no terminal — processos de longa duração como `npm run dev` ou `docker compose up` funcionam normalmente.
 
 ### Modo direto
 
@@ -211,6 +212,20 @@ Por padrão, o `dev` procura pelo arquivo `dev.yaml` no diretório atual. Você 
 dev --path meu-config.yaml
 
 dev --path meu-config.yaml <nome-da-task>
+```
+
+### Versão
+
+```bash
+dev version
+```
+
+### Atualizar
+
+Atualiza o `dev` para a última versão:
+
+```bash
+dev update
 ```
 
 ---
@@ -297,6 +312,20 @@ tasks:
   build:
     description: Rebuild das imagens
     cmd: docker compose build --no-cache
+```
+
+---
+
+## Atualizando
+
+```bash
+dev update
+```
+
+Ou rode o script de instalação novamente:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/JoaoPedr0Maciel/dev/main/install.sh | sh
 ```
 
 ---
