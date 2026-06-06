@@ -36,9 +36,9 @@
 ## Table of Contents
 
 - [Installation](#installation)
-  - [Linux](#linux)
-  - [macOS](#macos)
-  - [Windows](#windows)
+  - [Linux and macOS — curl](#linux-and-macos--curl)
+  - [Windows — PowerShell](#windows--powershell)
+  - [go install](#go-install)
   - [Build from source](#build-from-source)
 - [Configuration](#configuration)
 - [Usage](#usage)
@@ -49,88 +49,59 @@
 
 ## Installation
 
-### Requirements
+### Linux and macOS — curl
 
-- [Go 1.24+](https://go.dev/dl/)
-
-### Linux
-
-**Using `go install` (recommended):**
+The fastest way. No Go required.
 
 ```bash
-go install github.com/JoaoPedr0Maciel/dev/cmd/dev@latest
+curl -fsSL https://raw.githubusercontent.com/JoaoPedr0Maciel/dev/main/install.sh | sh
 ```
 
-This places the binary in `$GOPATH/bin` (usually `~/go/bin`). Make sure it's in your `PATH`:
+The script will:
+1. Detect your OS and architecture
+2. Download the correct binary from the [latest release](https://github.com/JoaoPedr0Maciel/dev/releases/latest)
+3. Install it to `/usr/local/bin` (or `~/.local/bin` if no write permission)
+
+If `dev` is not found after install, add the directory to your `PATH`:
 
 ```bash
 # Add to ~/.bashrc or ~/.zshrc
-export PATH="$PATH:$HOME/go/bin"
-```
-
-Then reload your shell:
-
-```bash
+export PATH="$PATH:$HOME/.local/bin"
 source ~/.bashrc   # or source ~/.zshrc
 ```
 
-**Verify the installation:**
+---
 
-```bash
-dev --help   # or just: dev
+### Windows — PowerShell
+
+```powershell
+$url = "https://github.com/JoaoPedr0Maciel/dev/releases/latest/download/dev_windows_amd64.exe"
+$dest = "$env:USERPROFILE\.local\bin\dev.exe"
+New-Item -ItemType Directory -Force -Path (Split-Path $dest) | Out-Null
+Invoke-WebRequest -Uri $url -OutFile $dest
 ```
+
+Then add `%USERPROFILE%\.local\bin` to your `PATH`:
+
+1. Open **Start** → search **"Environment Variables"**
+2. Under **User variables**, select `Path` → **Edit**
+3. Click **New** and add: `%USERPROFILE%\.local\bin`
+4. Click **OK** and restart your terminal
 
 ---
 
-### macOS
+### go install
 
-**Using `go install` (recommended):**
+If you have Go 1.24+ installed:
 
 ```bash
 go install github.com/JoaoPedr0Maciel/dev/cmd/dev@latest
 ```
 
-Make sure `~/go/bin` is in your `PATH`. Add to `~/.zshrc` (default shell on macOS):
+Make sure `$GOPATH/bin` (usually `~/go/bin`) is in your `PATH`:
 
 ```bash
 export PATH="$PATH:$HOME/go/bin"
-```
-
-Reload:
-
-```bash
-source ~/.zshrc
-```
-
-**Verify the installation:**
-
-```bash
-dev
-```
-
----
-
-### Windows
-
-**Using `go install`:**
-
-Open **PowerShell** or **Command Prompt** and run:
-
-```powershell
-go install github.com/JoaoPedr0Maciel/dev/cmd/dev@latest
-```
-
-The binary is placed in `%USERPROFILE%\go\bin`. Add it to your `PATH`:
-
-1. Open **Start** → search for **"Environment Variables"**
-2. Under **User variables**, select `Path` → **Edit**
-3. Click **New** and add: `%USERPROFILE%\go\bin`
-4. Click **OK** and restart your terminal
-
-**Verify in a new terminal window:**
-
-```powershell
-dev
 ```
 
 ---
@@ -147,7 +118,7 @@ go build -o dev ./cmd/dev/
 # Move to a directory in your PATH (Linux/macOS)
 sudo mv dev /usr/local/bin/
 
-# Or on Windows, move dev.exe to a folder already in PATH
+# On Windows, move dev.exe to a folder already in PATH
 ```
 
 ---

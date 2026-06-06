@@ -36,9 +36,9 @@
 ## Índice
 
 - [Instalação](#instalação)
-  - [Linux](#linux)
-  - [macOS](#macos)
-  - [Windows](#windows)
+  - [Linux e macOS — curl](#linux-e-macos--curl)
+  - [Windows — PowerShell](#windows--powershell)
+  - [go install](#go-install)
   - [Compilar do código-fonte](#compilar-do-código-fonte)
 - [Configuração](#configuração)
 - [Uso](#uso)
@@ -49,88 +49,59 @@
 
 ## Instalação
 
-### Requisitos
+### Linux e macOS — curl
 
-- [Go 1.24+](https://go.dev/dl/)
-
-### Linux
-
-**Via `go install` (recomendado):**
+A forma mais rápida. Não precisa ter Go instalado.
 
 ```bash
-go install github.com/JoaoPedr0Maciel/dev/cmd/dev@latest
+curl -fsSL https://raw.githubusercontent.com/JoaoPedr0Maciel/dev/main/install.sh | sh
 ```
 
-O binário é instalado em `$GOPATH/bin` (normalmente `~/go/bin`). Certifique-se de que esse diretório está no seu `PATH`:
+O script vai:
+1. Detectar seu sistema operacional e arquitetura
+2. Baixar o binário correto da [última release](https://github.com/JoaoPedr0Maciel/dev/releases/latest)
+3. Instalar em `/usr/local/bin` (ou `~/.local/bin` se não tiver permissão de escrita)
+
+Se o `dev` não for encontrado após a instalação, adicione o diretório ao `PATH`:
 
 ```bash
 # Adicione ao ~/.bashrc ou ~/.zshrc
-export PATH="$PATH:$HOME/go/bin"
-```
-
-Recarregue o shell:
-
-```bash
+export PATH="$PATH:$HOME/.local/bin"
 source ~/.bashrc   # ou source ~/.zshrc
 ```
 
-**Verifique a instalação:**
-
-```bash
-dev
-```
-
 ---
 
-### macOS
-
-**Via `go install` (recomendado):**
-
-```bash
-go install github.com/JoaoPedr0Maciel/dev/cmd/dev@latest
-```
-
-Adicione `~/go/bin` ao `PATH` no `~/.zshrc` (shell padrão do macOS):
-
-```bash
-export PATH="$PATH:$HOME/go/bin"
-```
-
-Recarregue:
-
-```bash
-source ~/.zshrc
-```
-
-**Verifique a instalação:**
-
-```bash
-dev
-```
-
----
-
-### Windows
-
-**Via `go install`:**
-
-Abra o **PowerShell** ou o **Prompt de Comando** e execute:
+### Windows — PowerShell
 
 ```powershell
-go install github.com/JoaoPedr0Maciel/dev/cmd/dev@latest
+$url = "https://github.com/JoaoPedr0Maciel/dev/releases/latest/download/dev_windows_amd64.exe"
+$dest = "$env:USERPROFILE\.local\bin\dev.exe"
+New-Item -ItemType Directory -Force -Path (Split-Path $dest) | Out-Null
+Invoke-WebRequest -Uri $url -OutFile $dest
 ```
 
-O binário é colocado em `%USERPROFILE%\go\bin`. Para adicioná-lo ao `PATH`:
+Em seguida, adicione `%USERPROFILE%\.local\bin` ao `PATH`:
 
 1. Abra o **Menu Iniciar** → pesquise **"Variáveis de Ambiente"**
 2. Em **Variáveis do usuário**, selecione `Path` → **Editar**
-3. Clique em **Novo** e adicione: `%USERPROFILE%\go\bin`
+3. Clique em **Novo** e adicione: `%USERPROFILE%\.local\bin`
 4. Clique em **OK** e reinicie o terminal
 
-**Verifique em uma nova janela do terminal:**
+---
 
-```powershell
-dev
+### go install
+
+Se você tiver Go 1.24+ instalado:
+
+```bash
+go install github.com/JoaoPedr0Maciel/dev/cmd/dev@latest
+```
+
+Certifique-se de que `$GOPATH/bin` (normalmente `~/go/bin`) está no seu `PATH`:
+
+```bash
+export PATH="$PATH:$HOME/go/bin"
 ```
 
 ---
