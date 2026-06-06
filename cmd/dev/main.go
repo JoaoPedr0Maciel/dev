@@ -4,12 +4,15 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"os/exec"
 	"time"
 
 	"github.com/JoaoPedr0Maciel/dev/internal/config"
 	"github.com/JoaoPedr0Maciel/dev/internal/runner"
 	"github.com/JoaoPedr0Maciel/dev/internal/tui"
 )
+
+var Version = "dev"
 
 func main() {
 	var configPath string
@@ -22,21 +25,41 @@ func main() {
 		os.Exit(1)
 	}
 
+	args := flag.Args()
+	if len(args) > 0 {
+		switch args[0] {
+		case "version", "--version", "-v":
+			fmt.Println("dev", Version)
+			return
+		case "update":
+			runUpdate()
+			return
+		default:
+			if len(cfg.Tasks) == 0 {
+				fmt.Fprintln(os.Stderr, "Error: no tasks found")
+				os.Exit(1)
+			}
+			runDirect(cfg, args[0])
+			return
+		}
+	}
+
 	if len(cfg.Tasks) == 0 {
 		fmt.Fprintln(os.Stderr, "Error: no tasks found")
 		os.Exit(1)
 	}
 
-	// Direct execution: dev <task-name>
-	args := flag.Args()
-	if len(args) > 0 {
-		runDirect(cfg, args[0])
+	selectedCmd, err := tui.Start(cfg)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "Error:", err)
+		os.Exit(1)
+	}
+
+	if selectedCmd == "" {
 		return
 	}
 
-	// TUI mode
-	if err := tui.Start(cfg); err != nil {
-		fmt.Fprintln(os.Stderr, "Error:", err)
+	if err := runner.RunLive(selectedCmd); err != nil {
 		os.Exit(1)
 	}
 }
@@ -64,5 +87,16 @@ func runDirect(cfg *config.Config, name string) {
 
 	if out := result.Stdout; out != "" {
 		fmt.Printf("\nOutput:\n%s", out)
+	}
+}
+
+func runUpdate() {
+	fmt.Println("Updating dev...")
+	c := exec.Command("sh", "-c", `curl -fsSL https://raw.githubusercontent.com/JoaoPedr0Maciel/dev/main/install.sh | sh`)
+	c.Stdout = os.Stdout
+	c.Stderr = os.Stderr
+	if err := c.Run(); err != nil {
+		fmt.Fprintln(os.Stderr, "Error: update failed")
+		os.Exit(1)
 	}
 }
