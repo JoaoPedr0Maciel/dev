@@ -23,11 +23,12 @@ jobs:
       - name: Build
         run: |
           mkdir dist
-          GOOS=linux   GOARCH=amd64 go build -ldflags="-s -w" -o dist/dev_linux_amd64       ./cmd/dev/
-          GOOS=linux   GOARCH=arm64 go build -ldflags="-s -w" -o dist/dev_linux_arm64       ./cmd/dev/
-          GOOS=darwin  GOARCH=amd64 go build -ldflags="-s -w" -o dist/dev_darwin_amd64      ./cmd/dev/
-          GOOS=darwin  GOARCH=arm64 go build -ldflags="-s -w" -o dist/dev_darwin_arm64      ./cmd/dev/
-          GOOS=windows GOARCH=amd64 go build -ldflags="-s -w" -o dist/dev_windows_amd64.exe ./cmd/dev/
+          LDFLAGS="-s -w -X main.Version=${GITHUB_REF_NAME}"
+          GOOS=linux   GOARCH=amd64 go build -ldflags="$LDFLAGS" -o dist/dev_linux_amd64       ./cmd/dev/
+          GOOS=linux   GOARCH=arm64 go build -ldflags="$LDFLAGS" -o dist/dev_linux_arm64       ./cmd/dev/
+          GOOS=darwin  GOARCH=amd64 go build -ldflags="$LDFLAGS" -o dist/dev_darwin_amd64      ./cmd/dev/
+          GOOS=darwin  GOARCH=arm64 go build -ldflags="$LDFLAGS" -o dist/dev_darwin_arm64      ./cmd/dev/
+          GOOS=windows GOARCH=amd64 go build -ldflags="$LDFLAGS" -o dist/dev_windows_amd64.exe ./cmd/dev/
 
       - name: Release
         uses: softprops/action-gh-release@v2

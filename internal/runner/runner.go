@@ -2,6 +2,7 @@ package runner
 
 import (
 	"bytes"
+	"os"
 	"os/exec"
 	"time"
 )
@@ -29,4 +30,12 @@ func Run(cmd string) Result {
 		Duration: time.Since(start),
 		Err:      err,
 	}
+}
+
+func RunLive(cmd string) error {
+	c := exec.Command("sh", "-c", cmd)
+	c.Stdout = os.Stdout
+	c.Stderr = os.Stderr
+	c.Stdin = os.Stdin
+	return c.Run()
 }
