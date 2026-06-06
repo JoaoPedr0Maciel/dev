@@ -8,7 +8,8 @@ import (
 )
 
 type Config struct {
-	Tasks map[string]Task `yaml:"tasks"`
+	Formatters []string        `yaml:"formatters"`
+	Tasks      map[string]Task `yaml:"tasks"`
 }
 
 type Task struct {
