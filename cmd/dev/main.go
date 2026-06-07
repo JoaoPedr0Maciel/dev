@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/JoaoPedr0Maciel/dev/internal/config"
+	"github.com/JoaoPedr0Maciel/dev/internal/formatter"
 	"github.com/JoaoPedr0Maciel/dev/internal/runner"
 	"github.com/JoaoPedr0Maciel/dev/internal/tui"
 )
@@ -59,6 +60,12 @@ func main() {
 		return
 	}
 
+	selectedCmd, err = formatter.Interpolate(selectedCmd, cfg.Formatters)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "Error:", err)
+		os.Exit(1)
+	}
+
 	if err := runner.RunLive(selectedCmd); err != nil {
 		os.Exit(1)
 	}
@@ -72,7 +79,14 @@ func runDirect(cfg *config.Config, name string) {
 	}
 
 	fmt.Printf("Running %s...\n\n", name)
-	result := runner.Run(task.Cmd)
+	
+	cmdStr, err := formatter.Interpolate(task.Cmd, cfg.Formatters)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "Error:", err)
+		os.Exit(1)
+	}
+
+	result := runner.Run(cmdStr)
 
 	if result.Err != nil {
 		fmt.Printf("✗ Failed\n\n")

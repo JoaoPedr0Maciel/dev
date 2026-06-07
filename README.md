@@ -157,6 +157,28 @@ tasks:
 
 > **Note:** `dev` looks for `dev.yaml` in the **current working directory**. Make sure you run `dev` from your project root.
 
+### Formatters & Macros
+
+You can enable native macro formatters to resolve values dynamically inside your commands without depending on OS-specific tools. List the enabled formatters under the `formatters` key and use the `@<formatter>.<action>(<args>)` syntax:
+
+```yaml
+formatters:
+  - time
+  - env
+
+tasks:
+  build:
+    description: Build the app with date and env port
+    cmd: go build -o bin/app_@time.now('YYYY-MM-DD')_@env.get('PORT')
+```
+
+#### Available Formatters
+
+| Formatter | Action | Example | Description |
+| --- | --- | --- | --- |
+| `time` | `now('format')` | `@time.now('YYYY-MM-DD')` | Formats current time using universal tokens (`YYYY`, `YY`, `MM`, `DD`, `hh`, `mm`, `ss`). |
+| `env` | `get('VAR')` | `@env.get('PORT')` | Reads from `.env` file or falls back to system environment variables. |
+
 ---
 
 ## Usage
